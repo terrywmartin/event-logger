@@ -1,0 +1,85 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+DROP TABLE IF EXISTS "users" CASCADE
+
+CREATE TABLE "users" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "email" varchar[100] UNIQUE,
+  "password" text,
+  "active" boolean,
+  "create_at" datetime,
+  "updated_at" datetime
+);
+
+DROP TABLE IF EXISTS "projects" CASCADE
+
+CREATE TABLE "projects" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar[50],
+  "description" varchar[250],
+  "created_at" datetime,
+  "updated_at" datetime
+);
+
+DROP TABLE IF EXISTS "api_keys" CASCADE
+
+CREATE TABLE "api_keys" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar[50],
+  "prefix" varchar[10],
+  "hash" text,
+  "user_id" uuid,
+  "project_id" uuid,
+  "create_at" timestamp
+);
+
+DROP TABLE IF EXISTS "users_projects" CASCADE
+
+CREATE TABLE "users_projects" (
+  "user_id" uuid,
+  "project_id" uuid
+
+  PRIMARY KEY (user_id, project_id
+);
+
+DROP TABLE IF EXISTS "categories" CASCADE
+
+CREATE TABLE "categories" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar[100],
+  "user_id" uuid,
+  "create_at" timestamp,
+  "updated_at" timestamp
+);
+
+DROP TABLE IF EXISTS "events" CASCADE
+
+CREATE TABLE "events" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "project_id" uuid,
+  "data" jsonb,
+  "create_at" timestamp
+);
+
+DROP TABLE IF EXISTS "required_keys" CASCADE
+
+CREATE TABLE "required_keys" (
+  "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  "name" varchar[25],
+  "project_id" uuid,
+  "create_at" timestamp
+);
+
+ALTER TABLE "users_projects" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "projects" ADD FOREIGN KEY ("id") REFERENCES "users_projects" ("project_id");
+
+ALTER TABLE "api_keys" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "api_keys" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");
+
+ALTER TABLE "categories" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "events" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");
+
+ALTER TABLE "required_keys" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");

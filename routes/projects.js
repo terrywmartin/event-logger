@@ -22,91 +22,22 @@ const router = new express.Router()
  *     Project:
  *       type: object
  *       required:
- *         - email
- *         - password
- *       properties:
- *         email:
- *           type: string
- *           description: User's email.  
- *         password:
- *           type: string
- *           description: User's password
- *         first_name:
- *           type: string
- *           description: User's first name
- *         last_name:
- *           type: string
- *           description: User's last name
- *       example:
- *         email: test@test.com
- *         password: Password123!
- *         first_name: First
- *         last_name: Last
- *        
- *     UserDto:
- *       type: object
+ *         - name
  *       properties:
  *         id:
  *           type: string
  *           description: Auto-generated UUID
- *         email:
+ *         name:
  *           type: string
- *           description: User's email
+ *           description: Project name.  
+ *         description:
+ *           type: string
+ *           description: Project description
+ *         
  *       example:
- *         id: a602e62a-95d8-4d09-9eab-cb05645094ee
- *         email: test@test.com
- *     CreateUserDto:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           description: Auto-generated UUID
- *         email:
- *           type: string
- *           description: User's email
- *         first_name:
- *           type: string
- *           description: User's first name
- *         last_name:
- *           type: string
- *           description: User's last name
- *       example:
- *         id: a602e62a-95d8-4d09-9eab-cb05645094ee
- *         email: test@test.com,
- *         first_name: first
- *         last_name: last
- * 
- *     ForgotPasswordDto:
- *       type: object
- *       properties:
- *         email:
- *           type: string
- *           description: User's email
- *       example:
- *         email: test@test.com
- * 
- *     Pong:
- *       type: string
- *       description: Server Response
- *       example:  Server is running
- *     
- *     Id:
- *       type: string
- *       description: UUID
- *       example:  a602e62a-95d8-4d09-9eab-cb05645094ee
- * 
- *     LoginDto:
- *       type: object
- *       properties:
- *         token:
- *           type: string
- *           description: Json Web Token
- *         refreshToken:
- *           type: string
- *           description: Refresh token
- *       example:
- *         jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
- *         refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+ *         id: a602e62a-95d8-4d09-9eab-cb05645094ee 
+ *         name: Event Logger
+ *         password: Simple app to store events
  */
 
 /**

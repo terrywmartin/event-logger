@@ -5,7 +5,12 @@ const {
     createEvent,
     getEventById,
     getEvents,
-    getEventsByProjectId
+    getEventsByProjectId,
+    getCategories,
+    getCategoryById,
+    getRequiredKeys,
+    getRequiredKeyById,
+    createRequiredKey
     
 } = require('../controllers/events')
 
@@ -23,87 +28,83 @@ const router = new express.Router()
  *     Events:
  *       type: object
  *       required:
- *         - email
- *         - password
+ *         - category
+ *         - type
  *       properties:
- *         email:
+ *         id:
  *           type: string
- *           description: User's email.  
- *         password:
+ *           description: Auto-generated UUID
+ *         category:
  *           type: string
- *           description: User's password
- *         first_name:
+ *           description: Event category  
+ *         type:
  *           type: string
- *           description: User's first name
- *         last_name:
+ *           description: Event type
+ *         project_id:
  *           type: string
- *           description: User's last name
+ *           description: Project Id the event is associated
+ *         timestamp:
+ *           type: timestamp
+ *           description: Time event was logged
+ *         data:
+ *           type: string
+ *           description: JSON payload
  *       example:
- *         email: test@test.com
- *         password: Password123!
- *         first_name: First
- *         last_name: Last
+ *         id: a602e62a-95d8-4d09-9eab-cb05645094ee 
+ *         category: authentication
+ *         type: failed-login
+ *         project_id: a602e62a-95d8-4d09-9eab-cb05645094ee 
+ *         timestamp: 2023-09-24 10:54:32
+ *         data: { 'username': 'johndoe', 'ip_address': '0.0.0.0' }
  *        
- *     UserDto:
+ *     Category:
  *       type: object
  *       properties:
  *         id:
  *           type: string
  *           description: Auto-generated UUID
- *         email:
+ *         name:
  *           type: string
- *           description: User's email
+ *           description: Category name
  *       example:
  *         id: a602e62a-95d8-4d09-9eab-cb05645094ee
- *         email: test@test.com
- *     CreateUserDto:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           description: Auto-generated UUID
- *         email:
- *           type: string
- *           description: User's email
- *         first_name:
- *           type: string
- *           description: User's first name
- *         last_name:
- *           type: string
- *           description: User's last name
- *       example:
- *         id: a602e62a-95d8-4d09-9eab-cb05645094ee
- *         email: test@test.com,
- *         first_name: first
- *         last_name: last
+ *         name: authentication
  * 
- *     ForgotPasswordDto:
+ *     EventType:
  *       type: object
  *       properties:
- *         email:
+ *         id:
  *           type: string
- *           description: User's email
+ *           description: Auto-generated UUID
+ *         name:
+ *           type: string
+ *           description: Type of event
  *       example:
- *         email: test@test.com
+ *         id: a602e62a-95d8-4d09-9eab-cb05645094ee,
+ *         name: failed-login
+ * 
+ *     RequiredKey:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated UUID        
+ *         name:
+ *           type: string
+ *           description: required key
+ *         project_id:
+ *           type: string
+ *           description: project the payload will originate
+ *       example:
+ *         id: a602e62a-95d8-4d0A-9eab-cb05645094ee 
+ *         name: username
+ *         project_id: a602e62a-95d8-4d09-9eab-cb05645094ee
  * 
  *     Pong:
  *       type: string
  *       description: Server Response
  *       example:  Server is running
- * 
- *     LoginDto:
- *       type: object
- *       properties:
- *         token:
- *           type: string
- *           description: Json Web Token
- *         refreshToken:
- *           type: string
- *           description: Refresh token
- *       example:
- *         jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
- *         refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
- */
+ * */
 
 /**
  * @swagger
@@ -200,7 +201,7 @@ router.get('/:id', getEventById)
 
 /**
  * @swagger
- * /api/v1/projects:
+ * /api/v1/events:
  *    post:
  *      summary: Create event
  *      tags:
@@ -211,5 +212,113 @@ router.get('/:id', getEventById)
  *          
  */
 router.post('', createEvent)
+
+/**
+ * @swagger
+ * /api/v1/events/categories/{id}:
+ *    get:
+ *      summary: Get category by ID
+ *      tags:
+ *        - Events
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          description: Category ID
+ *          schema:
+ *            $ref: "#/components/schemas/Id"
+ *          required: true
+ *      responses:
+ *        "200":
+ *          description: Return category
+ *          content:
+ *            application/json:
+ *              type: array
+ *              items:
+ *                schema:
+ *                  $ref: '#/components/schemas/Category'
+ *        
+ */
+router.get('/categories/:id', getCategoryById)
+
+/**
+ * @swagger
+ * /api/v1/events/categories:
+ *    get:
+ *      summary: Get all categories
+ *      tags:
+ *        - Events
+ *      responses:
+ *        "200":
+ *          description: Array of categories
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/Category'
+ *        
+ */
+router.get('', getCategories)
+
+/**
+ * @swagger
+ * /api/v1/events/required-keys:
+ *    get:
+ *      summary: Get all required-keys
+ *      tags:
+ *        - Events
+ *      responses:
+ *        "200":
+ *          description: Required keys
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/RequiredKeys'
+ *        
+ */
+router.get('', getRequiredKeys)
+
+/**
+ * @swagger
+ * /api/v1/events/required-keys/{id}:
+ *    get:
+ *      summary: Get required key by ID
+ *      tags:
+ *        - Events
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          description: Required Key ID
+ *          schema:
+ *            $ref: "#/components/schemas/Id"
+ *          required: true
+ *      responses:
+ *        "200":
+ *          description: Return event
+ *          content:
+ *            application/json:
+ *              type: array
+ *              items:
+ *                schema:
+ *                  $ref: '#/components/schemas/RequiredKey'
+ *        
+ */
+router.get('/:id', getRequiredKeyById)
+
+/**
+ * @swagger
+ * /api/v1/events/required-keys:
+ *    post:
+ *      summary: Create required key
+ *      tags:
+ *        - Events
+ *      responses:
+ *        "201":
+ *          description: Required Key created
+ *          
+ */
+router.post('', createRequiredKey)
 
 module.exports = router
