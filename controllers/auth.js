@@ -102,16 +102,6 @@ exports.loginUser = async (req, res) => {
     }
 }
 
-
-exports.logoutUser = (req, res) => {
-
-    const {refreshToken} = req.body
-
-    deleteToken(refreshToken)
-
-    res.status(200).send({})
-}
-
 exports.forgotPassword =  (req, res) => {
 
     return res.status(200).send({ msg: 'forgot password'})

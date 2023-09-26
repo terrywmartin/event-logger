@@ -3,10 +3,8 @@ const express = require('express')
 const router = new express.Router()
 
 const {
-    returnUser,
     registerUser,
     loginUser,
-    logoutUser,
     deleteUser,
     deleteAPIKey,
     activateUser,
@@ -139,25 +137,6 @@ const {
  *
  */
 
-/**
- * @swagger
- * /api/v1/auth/me:
- *    get:
- *      summary: Get the currently logged in user 
- *      tags:
- *        - Auth
- *      responses:
- *        "200":
- *          description: Returns User information
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/UserDto'
- *        "401":
- *          description: No user logged in
- */
-
-router.get('/me', returnUser)
 
 /**
  * @swagger
@@ -211,21 +190,6 @@ router.post('/register', registerUser)
  *          description: Internal server error
  */
 router.post('/login', loginUser)
-
-/**
- * @swagger
- * /api/v1/auth/logout:
- *    post:
- *      summary: Logout
- *      tags:
- *        - Auth
- *      responses:
- *        "200":
- *          description: Logs out current user
- *        "500":
- *          description: Internal server error
- */
-router.post('/logout',  logoutUser)
 
 /**
  * @swagger
