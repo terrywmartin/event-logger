@@ -79,6 +79,36 @@ CREATE TABLE "required_keys" (
   "create_at" timestamp
 );
 
+CREATE INDEX ON "users" ("id");
+
+CREATE INDEX ON "users" ("email");
+
+CREATE INDEX ON "projects" ("id");
+
+CREATE INDEX ON "projects" ("name");
+
+CREATE INDEX ON "api_keys" ("id");
+
+CREATE INDEX ON "api_keys" ("name");
+
+CREATE INDEX ON "api_keys" ("prefix");
+
+CREATE INDEX ON "categories" ("id");
+
+CREATE INDEX ON "categories" ("name");
+
+CREATE INDEX ON "events" ("id");
+
+CREATE INDEX ON "events" ("category");
+
+CREATE INDEX ON "events" ("type");
+
+CREATE INDEX ON "events" ("create_at");
+
+CREATE INDEX ON "required_keys" ("id");
+
+CREATE INDEX ON "required_keys" ("name");
+
 ALTER TABLE "users_projects" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "users_projects" ADD FOREIGN KEY ("project_id") REFERENCES "projects" ("id");

@@ -123,6 +123,7 @@ const {
  *           description: token
  *       example:  
  *         apiKey: afe8aewfw4.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+ * 
  *     CreateAPIKey:
  *       type: object
  *       properties:

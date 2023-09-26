@@ -3,7 +3,6 @@ const argon2 = require('argon2')
 
 const { db } = require('../helpers/db')
 const { generateTokens } = require('../helpers/jwt')
-const { storeToken, deleteToken, getToken } = require('../helpers/redis')
 const { generateKey, generatePrefix, generateSecretHash } = require('../helpers/api_keys')
 
 exports.returnUser = (req, res) => {
