@@ -5,8 +5,10 @@ exports.generateKey = async (size = 32, format = 'base64') => {
   return buffer.toString(format)
 }
 
-exports.generateSecretHash = async (key) => {
-  const salt = await randomBytes(8).toString('hex')
+exports.generateSecretHash = async (key, salt = undefined) => {
+  if (salt === undefined){
+    salt = await randomBytes(8).toString('hex')
+  }
   const buffer = await scryptSync(key, salt, 64) 
   return `${buffer.toString('hex')}.${salt}`
 }

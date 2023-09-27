@@ -24,6 +24,11 @@ exports.verifyJWT = async (token, secret) => {
     return response
 }
 
+exports.generateRefreshToken = async (user) => {
+    const refreshToken = await jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_LIFE})
+    return refreshToken
+}
+
 exports.refreshToken = async (token) => {
     
 }

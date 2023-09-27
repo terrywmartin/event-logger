@@ -134,7 +134,7 @@ exports.createApiKey = async (req, res) => {
     const apiKey = await generateKey()
     
     const hashedApiKey = await generateSecretHash(apiKey)
-
+    console.log(hashedApiKey)
     return res.status(201).send( { "apiKey": `${prefix}.${apiKey}`})
 
 }
